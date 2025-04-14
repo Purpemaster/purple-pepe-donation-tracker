@@ -20,7 +20,7 @@ def get_donation():
     }
     response = requests.get(url, headers=headers)
     data = response.json()
-    balances = data.get("result", {}).get("balance", [])
+    balances = data.get("result", {}).get("balances", [])  # <- korrigiert hier!
     usdc = next((b for b in balances if b["token_symbol"] == "USDC"), None)
     
     return jsonify({
