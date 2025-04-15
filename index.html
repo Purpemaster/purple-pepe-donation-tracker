@@ -3,25 +3,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Purple Pepe to the MOON!</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <audio autoplay loop id="bg-music">
-    <source src="assets/hype-music.mp3" type="audio/mpeg" />
+  <audio autoplay loop>
+    <source src="hype.mp3" type="audio/mpeg" />
   </audio>
-
   <div class="container">
-    <h1>Purple Pepe to the MOON! 🚀</h1>
-    <img src="assets/purple-pepe.png" alt="Purple Pepe" class="pepe"/>
-    <div class="progress-container">
-      <div class="progress-bar" id="progress-bar"></div>
+    <h1 class="glow">Purple Pepe to the MOON! 🚀</h1>
+    <img src="pepe-hype.png" class="meme" />
+    <div class="progress-bar">
+      <div class="progress" style="width: 60%"></div>
     </div>
-    <div class="donation-text" id="donation-text">$0 / $20,000</div>
-    <canvas id="dollars"></canvas>
+    <div class="donation-text">$12,000 / $20,000</div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
