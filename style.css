@@ -1,63 +1,53 @@
-
 body {
   margin: 0;
-  font-family: 'Orbitron', sans-serif;
-  color: white;
+  font-family: 'Arial', sans-serif;
   text-align: center;
+  color: white;
+  background-color: black;
   overflow: hidden;
-  background: black;
 }
-h1 {
-  margin-top: 30px;
-  font-size: 2.5em;
-  text-shadow: 0 0 10px #fff;
-}
+
 .background {
-  background: url('pepe_space.png') no-repeat center center fixed;
-  background-size: cover;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-}
-.tracker {
-  margin: 40px auto;
-  width: 80%;
-  max-width: 600px;
-}
-.progress-bar {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 30px;
-  height: 30px;
-  width: 100%;
-}
-.progress-fill {
-  background: linear-gradient(to right, #00ff87, #60efff);
-  height: 100%;
-  width: 60%;
-  border-radius: 30px;
-}
-.amount {
-  font-size: 1.5em;
-  margin-top: 10px;
-}
-body {
-  background-image: url('purple_pepe_background.jpg');
+  background-image: url('pepe_space.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-.background {
-  background-image: url('purple_pepe_bg.png'); /* <— ersetze durch deinen Bildnamen */
-  background-size: cover;
-  background-position: center;
   position: fixed;
-  width: 100%;
-  height: 100%;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   z-index: -1;
-  opacity: 0.4; /* Optional: Durchsichtigkeit */
+  opacity: 0.3;
+}
+
+h1 {
+  margin-top: 40px;
+  font-size: 2em;
+  text-shadow: 0 0 10px #fff;
+}
+
+.tracker {
+  margin-top: 50px;
+}
+
+.progress-bar {
+  width: 80%;
+  max-width: 500px;
+  height: 30px;
+  margin: 0 auto;
+  background: #333;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 60%;
+  background: linear-gradient(to right, #00ff88, #00cfff);
+}
+
+.amount {
+  margin-top: 10px;
+  font-size: 1.2em;
 }
