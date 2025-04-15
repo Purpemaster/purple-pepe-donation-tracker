@@ -1,0 +1,46 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, #6e00ff, #00c3ff);
+  color: #fff;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+.container {
+  padding: 30px;
+}
+
+.title {
+  font-size: 2.5rem;
+  text-shadow: 0 0 10px #fff;
+}
+
+.meme {
+  width: 300px;
+  margin: 20px 0;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #fff;
+}
+
+.progress-bar-bg {
+  width: 80%;
+  height: 30px;
+  background-color: #444;
+  margin: 20px auto;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, lime, cyan);
+  width: 0;
+}
+
+.donation-text {
+  font-size: 1.5rem;
+  margin-top: 10px;
+}
