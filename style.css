@@ -1,46 +1,44 @@
 
 body {
-    margin: 0;
-    font-family: 'Orbitron', sans-serif;
-    background: linear-gradient(90deg, #7b2ff7, #00c6ff);
-    color: white;
-    text-align: center;
-    overflow: hidden;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  background: black;
 }
-.glow {
-    font-size: 2.5em;
-    margin-top: 30px;
-    text-shadow: 0 0 10px #fff, 0 0 20px #7b2ff7, 0 0 30px #00c6ff;
+h1 {
+  margin-top: 30px;
+  font-size: 2.5em;
+  text-shadow: 0 0 10px #fff;
 }
-.donation-container {
-    margin: 20px auto;
-    width: 90%;
-    max-width: 600px;
+.background {
+  background: url('pepe_space.png') no-repeat center center fixed;
+  background-size: cover;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+}
+.tracker {
+  margin: 40px auto;
+  width: 80%;
+  max-width: 600px;
 }
 .progress-bar {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    height: 25px;
-    margin: 20px 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  height: 30px;
+  width: 100%;
 }
 .progress-fill {
-    background: linear-gradient(to right, #00ff00, #00c6ff);
-    height: 100%;
-    width: 60%;
-    border-radius: 20px;
+  background: linear-gradient(to right, #00ff87, #60efff);
+  height: 100%;
+  width: 60%;
+  border-radius: 30px;
 }
-.donation-amount {
-    font-size: 1.5em;
-}
-.meme-bg {
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    animation: float 3s ease-in-out infinite;
-}
-@keyframes float {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-20px); }
+.amount {
+  font-size: 1.5em;
+  margin-top: 10px;
 }
