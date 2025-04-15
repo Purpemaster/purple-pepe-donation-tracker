@@ -1,37 +1,46 @@
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #7f00ff, #00bfff);
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(90deg, #7b2ff7, #00c6ff);
     color: white;
     text-align: center;
-    margin: 0;
-    padding: 0;
+    overflow: hidden;
 }
-h1 {
-    font-size: 2em;
-    margin: 20px;
-    text-shadow: 0 0 10px #fff;
+.glow {
+    font-size: 2.5em;
+    margin-top: 30px;
+    text-shadow: 0 0 10px #fff, 0 0 20px #7b2ff7, 0 0 30px #00c6ff;
 }
-#meme-container img {
-    width: 250px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px #fff;
-    margin-bottom: 20px;
-}
-.progress-bar-bg {
-    width: 80%;
-    background-color: #444;
-    border-radius: 30px;
-    margin: auto;
-    height: 25px;
+.donation-container {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 600px;
 }
 .progress-bar {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    height: 25px;
+    margin: 20px 0;
+}
+.progress-fill {
+    background: linear-gradient(to right, #00ff00, #00c6ff);
     height: 100%;
-    background: linear-gradient(to right, #00ff00, #00ffff);
-    border-radius: 30px;
     width: 60%;
+    border-radius: 20px;
 }
 .donation-amount {
     font-size: 1.5em;
-    margin-top: 10px;
+}
+.meme-bg {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-20px); }
 }
