@@ -1,1 +1,53 @@
-body { background: linear-gradient(to right, #6a11cb, #2575fc); color: white; font-family: 'Comic Sans MS', cursive; text-align: center; padding: 50px; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, #6f00ff, #00c6ff);
+  overflow: hidden;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  position: relative;
+  padding-top: 60px;
+}
+
+h1 {
+  font-size: 2.5em;
+  text-shadow: 0 0 10px #fff, 0 0 20px #ff00ff;
+}
+
+.pepe {
+  width: 180px;
+  animation: float 3s ease-in-out infinite;
+  margin: 20px 0;
+}
+
+.progress-container {
+  background: rgba(255, 255, 255, 0.2);
+  width: 80%;
+  height: 30px;
+  border-radius: 20px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(to right, #00ff95, #00ffff);
+  border-radius: 20px 0 0 20px;
+  transition: width 1s ease-in-out;
+}
+
+.donation-text {
+  margin-top: 15px;
+  font-size: 1.5em;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
