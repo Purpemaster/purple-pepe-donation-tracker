@@ -1,114 +1,80 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Purple Pepe Donation Tracker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            background: linear-gradient(135deg, #4e54c8, #8f94fb);
-            color: white;
-            font-family: 'Arial Black', sans-serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            overflow-x: hidden;
-        }
-        h1 {
-            margin-top: 20px;
-            font-size: 2.5em;
-        }
-        .rocket {
-            position: absolute;
-            width: 100px;
-            animation: rocket-fly 6s infinite linear;
-        }
-        @keyframes rocket-fly {
-            0% { left: -120px; top: 60%; }
-            100% { left: 110%; top: 10%; }
-        }
-        .tracker {
-            background-color: rgba(0,0,0,0.3);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 40px auto;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
-        .progress-bar {
-            background: #444;
-            border-radius: 25px;
-            overflow: hidden;
-            margin-top: 15px;
-        }
-        .progress {
-            background: #00ff99;
-            height: 30px;
-            width: 0%;
-            border-radius: 25px;
-            transition: width 1s ease-in-out;
-        }
-        .value {
-            font-size: 1.5em;
-            margin-top: 10px;
-        }
-        .prices {
-            margin-top: 30px;
-            font-size: 1.2em;
-        }
-        .animated-cash {
-            position: absolute;
-            width: 40px;
-            animation: float 10s infinite ease-in;
-        }
-        @keyframes float {
-            0% { transform: translateY(100vh); }
-            100% { transform: translateY(-10vh); }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Purple Pepe Donation Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #6a00f4, #ff0080);
+      color: white;
+      overflow: hidden;
+    }
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      margin-top: 30px;
+      animation: glow 2s infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #fff, 0 0 20px #f0f, 0 0 30px #f0f; }
+      to { text-shadow: 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff; }
+    }
+    .bar-container {
+      width: 80%;
+      margin: 50px auto;
+      background: rgba(255,255,255,0.2);
+      border-radius: 25px;
+      padding: 10px;
+    }
+    .progress {
+      height: 40px;
+      width: 0;
+      border-radius: 20px;
+      background: linear-gradient(90deg, #0ff, #0f0);
+      animation: progressBar 5s ease-in-out forwards;
+    }
+    @keyframes progressBar {
+      to { width: 60%; } /* Simulating 60% of 20k */
+    }
+    .donation-amount {
+      text-align: center;
+      font-size: 2em;
+      margin-top: 20px;
+    }
+    .rocket {
+      position: absolute;
+      bottom: 50px;
+      left: -100px;
+      width: 100px;
+      animation: flyRocket 10s linear infinite;
+    }
+    @keyframes flyRocket {
+      0% { left: -100px; transform: rotate(45deg); }
+      100% { left: 120%; transform: rotate(45deg); }
+    }
+    .confetti {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://media.giphy.com/media/xT0xezQGU5xCDJuCPe/giphy.gif') center center/cover no-repeat;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-    <h1>Purple Pepe Moon Mission</h1>
-    <div class="tracker">
-        <div class="value">Live Donations: <span id="usd">$0.00</span> / $10,000</div>
-        <div class="progress-bar">
-            <div class="progress" id="bar"></div>
-        </div>
-        <div class="prices" id="prices"></div>
-    </div>
-
-    <img src="https://i.ibb.co/nnbFj7w/rocket.png" class="rocket" alt="rocket">
-    <img src="https://i.ibb.co/fSPSM9G/cash.png" class="animated-cash" style="left:10%"/>
-    <img src="https://i.ibb.co/fSPSM9G/cash.png" class="animated-cash" style="left:50%"/>
-    <img src="https://i.ibb.co/fSPSM9G/cash.png" class="animated-cash" style="left:80%"/>
-
-    <script>
-        async function fetchDonation() {
-            try {
-                const res = await fetch("https://purple-pepe-donation-tracker.onrender.com/donation");
-                const data = await res.json();
-
-                const donation = parseFloat(data.donation_total_usd || 0).toFixed(2);
-                const goal = 10000;
-                const percent = Math.min((donation / goal) * 100, 100).toFixed(1);
-
-                document.getElementById("usd").textContent = "$" + donation;
-                document.getElementById("bar").style.width = percent + "%";
-
-                let pricesHTML = "<h3>Live Prices:</h3>";
-                for (const [symbol, price] of Object.entries(data.prices)) {
-                    pricesHTML += `<p><strong>${symbol}</strong>: $${parseFloat(price).toFixed(4)}</p>`;
-                }
-                document.getElementById("prices").innerHTML = pricesHTML;
-
-            } catch (error) {
-                console.error("Error fetching donation data:", error);
-            }
-        }
-
-        fetchDonation();
-        setInterval(fetchDonation, 10000); // update every 10 seconds
-    </script>
+  <h1>Purple Pepe to the MOON! 🚀</h1>
+  <div class="bar-container">
+    <div class="progress"></div>
+  </div>
+  <div class="donation-amount">Total Donations: $12,000 / $20,000</div>
+  <img src="https://i.ibb.co/NWyccyg/rocket.png" alt="Rocket" class="rocket"/>
+  <div class="confetti"></div>
 </body>
 </html>
