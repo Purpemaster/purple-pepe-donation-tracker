@@ -1,46 +1,37 @@
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: linear-gradient(135deg, #6e00ff, #00c3ff);
-  color: #fff;
-  text-align: center;
-  overflow-x: hidden;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #7f00ff, #00bfff);
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
-
-.container {
-  padding: 30px;
+h1 {
+    font-size: 2em;
+    margin: 20px;
+    text-shadow: 0 0 10px #fff;
 }
-
-.title {
-  font-size: 2.5rem;
-  text-shadow: 0 0 10px #fff;
+#meme-container img {
+    width: 250px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #fff;
+    margin-bottom: 20px;
 }
-
-.meme {
-  width: 300px;
-  margin: 20px 0;
-  border-radius: 12px;
-  box-shadow: 0 0 20px #fff;
-}
-
 .progress-bar-bg {
-  width: 80%;
-  height: 30px;
-  background-color: #444;
-  margin: 20px auto;
-  border-radius: 20px;
-  overflow: hidden;
+    width: 80%;
+    background-color: #444;
+    border-radius: 30px;
+    margin: auto;
+    height: 25px;
 }
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(to right, lime, cyan);
-  width: 0;
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #00ff00, #00ffff);
+    border-radius: 30px;
+    width: 60%;
 }
-
-.donation-text {
-  font-size: 1.5rem;
-  margin-top: 10px;
+.donation-amount {
+    font-size: 1.5em;
+    margin-top: 10px;
 }
