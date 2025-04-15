@@ -42,3 +42,10 @@ h1 {
   font-size: 1.5em;
   margin-top: 10px;
 }
+body {
+  background-image: url('purple_pepe_background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
