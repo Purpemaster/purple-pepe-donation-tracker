@@ -33,3 +33,22 @@ function updateProgress(amountUSD) {
 }
 
 document.addEventListener("DOMContentLoaded", fetchDonationAmount);
+function updateProgress(amountUSD) {
+  const percent = Math.min((amountUSD / GOAL_USD) * 100, 100);
+  document.getElementById("progressFill").style.width = `${percent}%`;
+  document.getElementById("amountText").innerText = `$${amountUSD.toLocaleString(undefined, { maximumFractionDigits: 2 })} / $${GOAL_USD}`;
+
+  const message = document.getElementById("milestoneMessage");
+
+  if (amountUSD >= 20000) {
+    message.innerText = "LEGENDARY! $20K GOAL SMASHED!";
+  } else if (amountUSD >= 15000) {
+    message.innerText = "Purple Pepe is flying to the stars!";
+  } else if (amountUSD >= 10000) {
+    message.innerText = "10K reached! Moon mission engaged!";
+  } else if (amountUSD >= 5000) {
+    message.innerText = "Over $5K! Purple Power rising!";
+  } else {
+    message.innerText = "";
+  }
+}
