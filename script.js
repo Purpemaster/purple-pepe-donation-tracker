@@ -1,16 +1,35 @@
-const donationWallet = "9uo3TB4a8synap9VMNpby6nzmnMs9xJWmgo2YKJHZWVn";
+const WALLET_ADDRESS = "9uo3TB4a8synap9VMNpby6nzmnMs9xJWmgo2YKJHZWVn";
+const GOAL_USD = 20000;
 
-// Placeholder for now – you can later connect real data via API
-let donationAmount = 12000;
-let goalAmount = 20000;
+async function fetchDonationAmount() {
+  try {
+    const response = await fetch(`https://api.shyft.to/sol/v1/wallet/balance?network=mainnet-beta&wallet=${WALLET_ADDRESS}`, {
+      headers: {
+        "x-api-key": "QapPC-x-OPrgQC0r",
+        "accept": "application/json"
+      }
+    });
 
-function updateProgressBar() {
-  const percent = Math.min((donationAmount / goalAmount) * 100, 100);
-  const progressFill = document.getElementById("progressFill");
-  const amountText = document.getElementById("amountText");
+    const data = await response.json();
+    const balances = data.result.balance;
 
-  progressFill.style.width = `${percent}%`;
-  amountText.innerText = `$${donationAmount.toLocaleString()} / $${goalAmount.toLocaleString()}`;
+    let totalUSD = 0;
+    for (let token of balances) {
+      if (["USDC", "SOL", "PYUSD", "PURPE"].includes(token.token_symbol)) {
+        totalUSD += parseFloat(token.amount) * (parseFloat(token.price_usd) || 0);
+      }
+    }
+
+    updateProgress(totalUSD);
+  } catch (err) {
+    console.error("Fehler beim Laden der Wallet-Daten:", err);
+  }
 }
 
-document.addEventListener("DOMContentLoaded", updateProgressBar);
+function updateProgress(amountUSD) {
+  const percent = Math.min((amountUSD / GOAL_USD) * 100, 100);
+  document.getElementById("progressFill").style.width = `${percent}%`;
+  document.getElementById("amountText").innerText = `$${amountUSD.toLocaleString(undefined, { maximumFractionDigits: 2 })} / $${GOAL_USD}`;
+}
+
+document.addEventListener("DOMContentLoaded", fetchDonationAmount);
