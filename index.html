@@ -23,5 +23,18 @@
   </audio>
 
   <script src="script.js"></script>
+<audio id="hypeMusic" loop>
+  <source src="hype_music.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<script>
+  document.addEventListener('click', function () {
+    const audio = document.getElementById('hypeMusic');
+    if (audio.paused) {
+      audio.play().catch(err => console.log('Audio start error:', err));
+    }
+  }, { once: true });
+</script>
 </body>
 </html>
