@@ -51,19 +51,18 @@ async function fetchWalletBalance() {
     let pyusdUSD = 0;
 
     for (const token of tokens) {
-      const mint = token.mint?.trim().toLowerCase();
-      const decimals = token.decimals || 6;
-      const rawAmount = parseFloat(token.amount) || 0;
-      const amount = rawAmount / Math.pow(10, decimals);
+  const mint = token.mint?.trim().toLowerCase();
+  const decimals = token.decimals || 6;
+  const rawAmount = parseFloat(token.amount || token.tokenAmount?.amount) || 0;
+  const amount = rawAmount / Math.pow(10, decimals);
 
-      if (mint === purpeMint.toLowerCase()) {
-        purpeUSD = amount * purpePrice;
-      }
+  console.log("Token gefunden:", mint, "Menge:", amount);
 
-      if (mint === pyusdMint.toLowerCase()) {
-        pyusdUSD = amount * fixedPyusdPrice;
-      }
-    }
+  if (mint === pyusdMint.toLowerCase()) {
+    pyusdUSD = amount * fixedPyusdPrice;
+    console.log(">>> PYUSD gefunden! USD-Wert:", pyusdUSD);
+  }
+}
 
     const totalUSD = solUSD + purpeUSD + pyusdUSD;
     const percent = Math.min((totalUSD / goalUSD) * 100, 100);
