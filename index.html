@@ -2,18 +2,62 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Donation Tracker</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0e0e0e;
+      color: #f4f4f4;
+      text-align: center;
+      padding: 30px;
+    }
+
+    #raised-amount {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    #progress-container {
+      background: #333;
+      height: 20px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 20px auto;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #progress-bar {
+      background: linear-gradient(90deg, #6a00ff, #b300ff);
+      height: 100%;
+      width: 0%;
+      transition: width 0.5s ease-in-out;
+    }
+
+    #token-breakdown {
+      font-size: 1.1em;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Spendenstand</h1>
+
+  <h1>Live Donation Tracker</h1>
   <div id="raised-amount">$0.00</div>
-  <div id="progress-bar-container">
+
+  <div id="progress-container">
     <div id="progress-bar"></div>
   </div>
-  <div id="token-breakdown" style="margin-top: 10px;"></div>
 
+  <div id="token-breakdown">
+    • SOL: $0.00<br>
+    • PURPE: $0.00<br>
+    • PYUSD: $0.00
+  </div>
+
+  <!-- Skripte laden -->
   <script src="script.js"></script>
+  <script src="pyusd.js"></script>
 </body>
-  <pre id="debug-log" style="font-size: 13px; max-height: 400px; overflow-y: scroll; background: #f4f4f4; padding: 10px;"></pre>
 </html>
