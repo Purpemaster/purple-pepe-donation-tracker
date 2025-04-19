@@ -1,7 +1,8 @@
 const walletAddress = "9uo3TB4a8synap9VMNpby6nzmnMs9xJWmgo2YKJHZWVn";
 const heliusApiKey = "2e046356-0f0c-4880-93cc-6d5467e81c73";
 
-const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo";
+// Dein tatsächlicher PYUSD-Mint aus dem Wallet (aus Debug)
+const pyusdMint = "CxUvRAxLanvp587AQVpFanK6tZXS9RRUVK6GqkoS3pump";
 const fixedPyusdPrice = 0.9997;
 
 function debugLog(message) {
@@ -14,7 +15,7 @@ function debugLog(message) {
 function clearDebug() {
   const el = document.getElementById("debug-output");
   if (el) {
-    el.textContent = ""; // clear before each fetch
+    el.textContent = "";
   }
 }
 
