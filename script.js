@@ -21,7 +21,7 @@ async function fetchSolPrice() {
 
 async function fetchPurpePrice() {
   try {
-    const res = await fetch("https://api.dexscreener.com/latest/dex/pairs/solana/" + purpeMint);
+    const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${purpeMint}`);
     const data = await res.json();
     if (data.pairs && data.pairs.length > 0) {
       const priceUsd = parseFloat(data.pairs[0].priceUsd);
@@ -52,8 +52,12 @@ async function fetchWalletBalance() {
 
     for (const token of tokens) {
       const mint = token.mint?.trim().toLowerCase();
-      const decimals = token.decimals || 6;
-      const amount = token.amount / Math.pow(10, decimals);
+      const tokenAmount = token.tokenAmount;
+
+      if (!mint || !tokenAmount) continue;
+
+      const decimals = tokenAmount.decimals || 6;
+      const amount = tokenAmount.uiAmount || (tokenAmount.amount / Math.pow(10, decimals));
 
       if (mint === purpeMint.toLowerCase()) {
         purpeUSD = amount * purpePrice;
@@ -67,7 +71,6 @@ async function fetchWalletBalance() {
     const totalUSD = solUSD + purpeUSD + pyusdUSD;
     const percent = Math.min((totalUSD / goalUSD) * 100, 100);
 
-    // Assuming these elements exist in your HTML
     document.getElementById("raised-amount").textContent = `$${totalUSD.toFixed(2)}`;
     document.getElementById("progress-bar").style.width = `${percent}%`;
 
