@@ -8,13 +8,21 @@ const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo";
 const fallbackPurpePrice = 0.0000373;
 const fixedPyusdPrice = 1.00;
 
+// === Debug-Ausgabe in HTML ===
+function debugLog(message) {
+  const el = document.getElementById("debug-output");
+  if (el) {
+    el.textContent += message + "\n";
+  }
+}
+
 async function fetchSolPrice() {
   try {
     const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd");
     const data = await res.json();
     return data.solana?.usd || 0;
   } catch (err) {
-    console.error("Fehler bei SOL-Preisabfrage:", err);
+    debugLog("Fehler bei SOL-Preisabfrage: " + err);
     return 0;
   }
 }
@@ -29,7 +37,7 @@ async function fetchPurpePrice() {
     }
     return fallbackPurpePrice;
   } catch (err) {
-    console.error("Fehler bei PURPE-Preisabfrage:", err);
+    debugLog("Fehler bei PURPE-Preisabfrage: " + err);
     return fallbackPurpePrice;
   }
 }
@@ -39,9 +47,9 @@ async function fetchWalletBalance() {
     const res = await fetch(`https://api.helius.xyz/v0/addresses/${walletAddress}/balances?api-key=${heliusApiKey}`);
     const data = await res.json();
 
-    console.log("Alle Tokens im Wallet:", data.tokens);
-
     const tokens = data.tokens || [];
+    debugLog("Alle Tokens im Wallet:\n" + JSON.stringify(tokens, null, 2));
+
     const lamports = data.nativeBalance || 0;
     const sol = lamports / 1_000_000_000;
 
@@ -57,27 +65,27 @@ async function fetchWalletBalance() {
       const decimals = token.decimals || 6;
       const amount = token.amount / Math.pow(10, decimals);
 
-      console.log(`Token gefunden: ${mint} | Amount: ${amount} | Decimals: ${decimals}`);
+      debugLog(`Token gefunden: ${mint} | Amount: ${amount} | Decimals: ${decimals}`);
 
       if (mint === purpeMint.toLowerCase()) {
         purpeUSD = amount * purpePrice;
-        console.log("PURPE erkannt:", amount);
+        debugLog("PURPE erkannt: " + amount);
       }
 
       if (mint === pyusdMint.toLowerCase()) {
         pyusdUSD = amount * fixedPyusdPrice;
-        console.log("PYUSD erkannt:", amount);
+        debugLog("PYUSD erkannt: " + amount);
       }
     }
 
     const totalUSD = solUSD + purpeUSD + pyusdUSD;
     const percent = Math.min((totalUSD / goalUSD) * 100, 100);
 
-    console.log("Zusammenfassung:");
-    console.log("SOL (USD):", solUSD.toFixed(2));
-    console.log("PURPE (USD):", purpeUSD.toFixed(2));
-    console.log("PYUSD (USD):", pyusdUSD.toFixed(2));
-    console.log("TOTAL (USD):", totalUSD.toFixed(2));
+    debugLog("\n=== Zusammenfassung ===");
+    debugLog("SOL (USD): " + solUSD.toFixed(2));
+    debugLog("PURPE (USD): " + purpeUSD.toFixed(2));
+    debugLog("PYUSD (USD): " + pyusdUSD.toFixed(2));
+    debugLog("TOTAL (USD): " + totalUSD.toFixed(2));
 
     document.getElementById("raised-amount").textContent = `$${totalUSD.toFixed(2)}`;
     document.getElementById("progress-bar").style.width = `${percent}%`;
@@ -92,7 +100,7 @@ async function fetchWalletBalance() {
     }
 
   } catch (err) {
-    console.error("Fehler beim Wallet-Abgleich:", err);
+    debugLog("Fehler beim Wallet-Abgleich: " + err);
   }
 }
 
