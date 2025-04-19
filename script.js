@@ -52,18 +52,23 @@ async function fetchWalletBalance() {
     let pyusdUSD = 0;
 
     for (const token of tokens) {
-  const mint = token.mint;
+  const mint = token.mint?.trim().toLowerCase();
   const tokenAmount = token.tokenAmount;
 
   if (!mint || !tokenAmount) continue;
 
-  const decimals = tokenAmount.decimals || 1;
+  const decimals = tokenAmount.decimals || 6;
   const rawAmount = parseFloat(tokenAmount.amount) || 0;
   const amount = tokenAmount.uiAmount ?? (rawAmount / Math.pow(10, decimals));
 
-  if (mint === purpeMint) {
+  if (mint === purpeMint.toLowerCase()) {
     purpeUSD = amount * purpePrice;
   }
+
+  if (mint === pyusdMint.toLowerCase()) {
+    pyusdUSD = amount * fixedPyusdPrice;
+  }
+}
 
   if (mint === pyusdMint) {
     pyusdUSD = amount * fixedPyusdPrice;
