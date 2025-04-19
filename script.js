@@ -2,8 +2,8 @@ const walletAddress = "9uo3TB4a8synap9VMNpby6nzmnMs9xJWmgo2YKJHZWVn";
 const heliusApiKey = "2e046356-0f0c-4880-93cc-6d5467e81c73";
 const goalUSD = 20000;
 
-const purpeMint = "HBoNJ5v8g71s2boRivrHnfSB5MVPLDHHyVjruPfhGkvL";
-const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo";
+const purpeMint = "HBoNJ5v8g71s2boRivrHnfSB5MVPLDHHyVjruPfhGkvL".toLowerCase();
+const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo".toLowerCase();
 
 const fallbackPurpePrice = 0.0000373;
 const fixedPyusdPrice = 1.00;
@@ -21,7 +21,7 @@ async function fetchSolPrice() {
 
 async function fetchPurpePrice() {
   try {
-    const res = await fetch("https://api.dexscreener.com/latest/dex/pairs/solana/HBoNJ5v8g71s2boRivrHnfSB5MVPLDHHyVjruPfhGkvL");
+    const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${purpeMint}`);
     const data = await res.json();
     if (data.pairs && data.pairs.length > 0) {
       const priceUsd = parseFloat(data.pairs[0].priceUsd);
@@ -51,20 +51,19 @@ async function fetchWalletBalance() {
     let pyusdUSD = 0;
 
     for (const token of tokens) {
-  const mint = token.mint?.trim().toLowerCase();
-  const tokenAmount = token.tokenAmount;
-  const amount = tokenAmount?.uiAmount || 0;
+      const mint = token.mint?.trim().toLowerCase();
+      const uiAmount = token.tokenAmount?.uiAmount || 0;
 
-  console.log("Token gefunden:", mint, "| Amount:", amount);
+      console.log(">>> Token:", mint, "| Menge:", uiAmount);
 
-  if (mint === purpeMint.toLowerCase()) {
-    purpeUSD = amount * purpePrice;
-  }
+      if (mint === purpeMint) {
+        purpeUSD = uiAmount * purpePrice;
+      }
 
-  if (mint === pyusdMint.toLowerCase()) {
-    pyusdUSD = amount * fixedPyusdPrice;
-  }
-}
+      if (mint === pyusdMint) {
+        pyusdUSD = uiAmount * fixedPyusdPrice;
+      }
+    }
 
     const totalUSD = solUSD + purpeUSD + pyusdUSD;
     const percent = Math.min((totalUSD / goalUSD) * 100, 100);
