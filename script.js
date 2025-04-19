@@ -3,9 +3,6 @@ const heliusApiKey = "2e046356-0f0c-4880-93cc-6d5467e81c73";
 const goalUSD = 20000;
 
 const purpeMint = "HBoNJ5v8g71s2boRivrHnfSB5MVPLDHHyVjruPfhGkvL";
-// Wir ignorieren PYUSD auf-chain, setzen statisch:
-const fixedPyusdPrice = 1.00;
-const pyusdManualAmount = 545; // <<< HIER einfach anpassen bei Bedarf
 
 const fallbackPurpePrice = 0.0000373;
 
@@ -61,10 +58,7 @@ async function fetchWalletBalance() {
       }
     }
 
-    // Manuell gesetzter PYUSD-Betrag:
-    const pyusdUSD = pyusdManualAmount * fixedPyusdPrice;
-
-    const totalUSD = solUSD + purpeUSD + pyusdUSD;
+    const totalUSD = solUSD + purpeUSD; // PYUSD wird separat durch pyusd.js behandelt
     const percent = Math.min((totalUSD / goalUSD) * 100, 100);
 
     document.getElementById("raised-amount").textContent = `$${totalUSD.toFixed(2)}`;
@@ -75,7 +69,7 @@ async function fetchWalletBalance() {
       breakdownEl.innerHTML = `
         • SOL: $${solUSD.toFixed(2)}<br>
         • PURPE: $${purpeUSD.toFixed(2)}<br>
-        • PYUSD: $${pyusdUSD.toFixed(2)}
+        • PYUSD: $0.00<br> <!-- Platzhalter, wird von pyusd.js überschrieben -->
       `;
     }
 
