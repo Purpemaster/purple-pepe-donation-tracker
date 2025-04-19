@@ -2,9 +2,8 @@ const walletAddress = "9uo3TB4a8synap9VMNpby6nzmnMs9xJWmgo2YKJHZWVn";
 const heliusApiKey = "2e046356-0f0c-4880-93cc-6d5467e81c73";
 const goalUSD = 20000;
 
-// KORREKTE MINTS (Dank deiner Detektivarbeit!)
 const purpeMint = "HBoNJ5v8g71s2boRivrHnfSB5MVPLDHHyVjruPfhGkvL";
-const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"; // ← kleiner Buchstabe o UND X drin!
+const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo";
 
 const fallbackPurpePrice = 0.0000373;
 const fixedPyusdPrice = 1.00;
@@ -52,30 +51,20 @@ async function fetchWalletBalance() {
     let pyusdUSD = 0;
 
     for (const token of tokens) {
-  const mint = token.mint?.trim().toLowerCase();
-  const tokenAmount = token.tokenAmount;
+      const mint = token.mint?.trim().toLowerCase();
+      const tokenAmount = token.tokenAmount;
 
-  if (!mint || !tokenAmount) continue;
+      if (!mint || !tokenAmount) continue;
 
-  const decimals = tokenAmount.decimals || 6;
-  const rawAmount = parseFloat(tokenAmount.amount) || 0;
-  const amount = tokenAmount.uiAmount ?? (rawAmount / Math.pow(10, decimals));
+      const decimals = tokenAmount.decimals || 6;
+      const rawAmount = parseFloat(tokenAmount.amount) || 0;
+      const amount = tokenAmount.uiAmount ?? (rawAmount / Math.pow(10, decimals));
 
-  if (mint === purpeMint.toLowerCase()) {
-    purpeUSD = amount * purpePrice;
-  }
+      if (mint === purpeMint.toLowerCase()) {
+        purpeUSD = amount * purpePrice;
+      }
 
-  if (mint === pyusdMint.toLowerCase()) {
-    pyusdUSD = amount * fixedPyusdPrice;
-  }
-}
-
-  if (mint === pyusdMint) {
-    pyusdUSD = amount * fixedPyusdPrice;
-  }
-}ü
-
-      if (mint === pyusdMint) {
+      if (mint === pyusdMint.toLowerCase()) {
         pyusdUSD = amount * fixedPyusdPrice;
       }
     }
