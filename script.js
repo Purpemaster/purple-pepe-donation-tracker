@@ -1,22 +1,18 @@
 const walletAddress = "9uo3TB4a8synap9VMNpby6nzmnMs9xJWmgo2YKJHZWVn";
 const heliusApiKey = "2e046356-0f0c-4880-93cc-6d5467e81c73";
 
-// RICHTIGE PYUSD Mint-Adresse
+// Korrekte PYUSD Mint-Adresse aus Solscan
 const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo";
 const fixedPyusdPrice = 0.9997;
 
 function debugLog(message) {
   const el = document.getElementById("debug-output");
-  if (el) {
-    el.textContent += message + "\n";
-  }
+  if (el) el.textContent += message + "\n";
 }
 
 function clearDebug() {
   const el = document.getElementById("debug-output");
-  if (el) {
-    el.textContent = "";
-  }
+  if (el) el.textContent = "";
 }
 
 async function fetchPyusdWithDebug() {
@@ -28,7 +24,6 @@ async function fetchPyusdWithDebug() {
 
     const tokens = data.tokens || [];
     let pyusdUSD = 0;
-
     debugLog(`--- Tokens im Wallet (${tokens.length}) ---`);
 
     for (const token of tokens) {
@@ -39,7 +34,7 @@ async function fetchPyusdWithDebug() {
       debugLog(`Mint: ${mint}`);
       debugLog(`→ Amount: ${amount} | Decimals: ${decimals}`);
 
-      if (mint === pyusdMint) {
+      if (mint.toLowerCase() === pyusdMint.toLowerCase()) {
         pyusdUSD = amount * fixedPyusdPrice;
         debugLog(`✓ PYUSD erkannt! USD: $${pyusdUSD.toFixed(2)}\n`);
         break;
