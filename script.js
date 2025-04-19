@@ -21,7 +21,7 @@ async function fetchSolPrice() {
 
 async function fetchPurpePrice() {
   try {
-    const res = await fetch("https://api.dexscreener.com/latest/dex/pairs/solana/HBoNJ5v8g71s2boRivrHnfSB5MVPLDHHyVjruPfhGkvL");
+    const res = await fetch("https://api.dexscreener.com/latest/dex/pairs/solana/" + purpeMint);
     const data = await res.json();
     if (data.pairs && data.pairs.length > 0) {
       const priceUsd = parseFloat(data.pairs[0].priceUsd);
@@ -39,6 +39,8 @@ async function fetchWalletBalance() {
     const res = await fetch(`https://api.helius.xyz/v0/addresses/${walletAddress}/balances?api-key=${heliusApiKey}`);
     const data = await res.json();
 
+    console.log("Alle Tokens im Wallet:", data.tokens);
+
     const tokens = data.tokens || [];
     const lamports = data.nativeBalance || 0;
     const sol = lamports / 1_000_000_000;
@@ -51,21 +53,31 @@ async function fetchWalletBalance() {
     let pyusdUSD = 0;
 
     for (const token of tokens) {
-      const mint = token.mint?.trim().toLowerCase();
+      const mint = (token.mint || "").trim().toLowerCase();
       const decimals = token.decimals || 6;
       const amount = token.amount / Math.pow(10, decimals);
 
+      console.log(`Token gefunden: ${mint} | Amount: ${amount} | Decimals: ${decimals}`);
+
       if (mint === purpeMint.toLowerCase()) {
         purpeUSD = amount * purpePrice;
+        console.log("PURPE erkannt:", amount);
       }
 
       if (mint === pyusdMint.toLowerCase()) {
         pyusdUSD = amount * fixedPyusdPrice;
+        console.log("PYUSD erkannt:", amount);
       }
     }
 
     const totalUSD = solUSD + purpeUSD + pyusdUSD;
     const percent = Math.min((totalUSD / goalUSD) * 100, 100);
+
+    console.log("Zusammenfassung:");
+    console.log("SOL (USD):", solUSD.toFixed(2));
+    console.log("PURPE (USD):", purpeUSD.toFixed(2));
+    console.log("PYUSD (USD):", pyusdUSD.toFixed(2));
+    console.log("TOTAL (USD):", totalUSD.toFixed(2));
 
     document.getElementById("raised-amount").textContent = `$${totalUSD.toFixed(2)}`;
     document.getElementById("progress-bar").style.width = `${percent}%`;
@@ -85,4 +97,4 @@ async function fetchWalletBalance() {
 }
 
 fetchWalletBalance();
-setInterval(fetchWalletBalance, 60000);p
+setInterval(fetchWalletBalance, 60000);
