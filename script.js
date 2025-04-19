@@ -1,29 +1,20 @@
 const walletAddress = "9uo3TB4a8synap9VMNpby6nzmnMs9xJWmgo2YKJHZWVn";
 const heliusApiKey = "2e046356-0f0c-4880-93cc-6d5467e81c73";
-
-// Correct PYUSD Mint Address
 const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo";
-const pyusdPrice = 0.9997; // Fixed price in USD
+const pyusdPrice = 0.9997; // Fixed USD price
 
-function logDebug(message) {
-  const el = document.getElementById("debug-output");
-  if (el) el.textContent += message + "\n";
-}
-
-function clearDebug() {
-  const el = document.getElementById("debug-output");
-  if (el) el.textContent = "";
+function updateText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
 }
 
 async function fetchPYUSD() {
-  clearDebug();
-
   try {
     const res = await fetch(`https://api.helius.xyz/v0/addresses/${walletAddress}/balances?api-key=${heliusApiKey}`);
     const data = await res.json();
     const tokens = data.tokens || [];
 
-    let pyusdAmountUSD = 0;
+    let pyusdUSD = 0;
 
     for (const token of tokens) {
       const mint = (token.mint || "").trim();
@@ -31,15 +22,15 @@ async function fetchPYUSD() {
       const amount = token.amount / Math.pow(10, decimals);
 
       if (mint === pyusdMint) {
-        pyusdAmountUSD = amount * pyusdPrice;
+        pyusdUSD = amount * pyusdPrice;
         break;
       }
     }
 
-    document.getElementById("raised-amount").textContent = `$${pyusdAmountUSD.toFixed(2)}`;
-    document.getElementById("token-breakdown").textContent = `• PYUSD: $${pyusdAmountUSD.toFixed(2)}`;
+    updateText("raised-amount", `$${pyusdUSD.toFixed(2)}`);
+    updateText("token-breakdown", `• PYUSD: $${pyusdUSD.toFixed(2)}`);
   } catch (err) {
-    logDebug("Fetch error: " + err.message);
+    updateText("token-breakdown", "Error loading PYUSD");
   }
 }
 
