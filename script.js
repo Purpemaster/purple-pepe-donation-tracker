@@ -2,9 +2,11 @@ const walletAddress = "9uo3TB4a8synap9VMNpby6nzmnMs9xJWmgo2YKJHZWVn";
 const heliusApiKey = "2e046356-0f0c-4880-93cc-6d5467e81c73";
 const goalUSD = 20000;
 
+// Mint-Adressen exakt wie auf Solana
 const purpeMint = "HBoNJ5v8g71s2boRivrHnfSB5MVPLDHHyVjruPfhGkvL";
 const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo";
 
+// Fallback/Fixed Preise
 const fallbackPurpePrice = 0.0000373;
 const fixedPyusdPrice = 1.00;
 
@@ -90,4 +92,4 @@ async function fetchWalletBalance() {
 }
 
 fetchWalletBalance();
-setInterval(fetchWalletBalance, 60000);
+setInterval(fetchWalletBalance, 60000);ü
