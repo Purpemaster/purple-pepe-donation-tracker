@@ -1,112 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Purple Pepe Donation Tracker</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
+  <title>Donation Tracker</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Orbitron', sans-serif;
-      background-color: #000;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      font-family: sans-serif;
+      padding: 20px;
     }
-
-    .container {
-      width: 90%;
-      max-width: 500px;
-      text-align: center;
-    }
-
-    .title {
-      font-size: 1.8rem;
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px #00f7ff;
-    }
-
-    .progress-bar {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
+    #progress-bar-container {
+      width: 100%;
+      background: #eee;
       height: 20px;
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
-
     #progress-bar {
-      background: linear-gradient(to right, #00f7ff, #8b00ff);
       height: 100%;
       width: 0%;
-      transition: width 0.5s ease-in-out;
-    }
-
-    .amounts {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-    }
-
-    #token-breakdown {
-      font-size: 0.9rem;
-      line-height: 1.4;
-      color: #ccc;
-      margin-bottom: 20px;
-    }
-
-    .info-box {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid #00f7ff;
-      border-radius: 10px;
-      padding: 15px;
-      font-size: 0.95rem;
-      text-shadow: 0 0 5px black;
-    }
-
-    .pulse {
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 5px #00f7ff; }
-      50% { box-shadow: 0 0 15px #00f7ff; }
-      100% { box-shadow: 0 0 5px #00f7ff; }
+      background: green;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1 class="title">Live Donation Tracker</h1>
-
-    <div class="progress-bar">
-      <div class="progress-fill" id="progress-bar"></div>
-    </div>
-
-    <div class="amounts">
-      <span id="raised-amount">$0</span>
-      <span id="amountGoal">$20,000</span>
-    </div>
-
-    <div id="token-breakdown"></div>
-
-    <div class="info-box pulse">
-      <p><strong>Purple Pepe is becoming a legend – this wallet is the fuel.</strong></p>
-      <p>Your donation powers our journey to the world’s biggest exchanges.</p>
-    </div>
-
-    <!-- DEBUG-BEREICH -->
-    <div id="debug-output"
-         style="max-height: 200px; overflow-y: auto; background: #111; padding: 10px; margin-top: 30px;
-         font-size: 10px; color: #aaa; border: 1px solid #00f7ff; border-radius: 8px;">
-    </div>
+  <h1>Spendenstand</h1>
+  <div id="raised-amount">$0.00</div>
+  <div id="progress-bar-container">
+    <div id="progress-bar"></div>
   </div>
+  <div id="token-breakdown" style="margin-top: 10px;"></div>
 
-  <script src="script.js"></script>
+  <script>
+    const walletAddress = "9uo3TB4a8synap9VMNpby6nzmnMs9xJWmgo2YKJHZWVn";
+    const heliusApiKey = "2e046356-0f0c-4880-93cc-6d5467e81c73";
+    const goalUSD = 20000;
+
+    const purpeMint = "HBoNJ5v8g71s2boRivrHnfSB5MVPLDHHyVjruPfhGkvL";
+    const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo";
+
+    const fallbackPurpePrice = 0.0000373;
+    const fixedPyusdPrice = 1.00;
+
+    async function fetchSolPrice() {
+      try {
+        const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd");
+        const data = await res.json();
+        return data.solana?.usd || 0;
+      } catch (err) {
+        console.error("Fehler beim Abrufen des SOL-Preises:", err);
+        return 0;
+      }
+    }
+
+    async function fetchPurpePrice() {
+      try {
+        const res = await fetch(`https://api.dexscreener.com/latest/dex/pairs/solana/${purpeMint}`);
+        const data = await res.json();
+        if (data.pairs && data.pairs.length > 0) {
+          const priceUsd = parseFloat(data.pairs[0].priceUsd);
+          return isNaN(priceUsd) ? fallbackPurpePrice : priceUsd;
+        }
+        return fallbackPurpePrice;
+      } catch (err) {
+        console.error("Fehler beim Abrufen des PURPE-Preises:", err);
+        return fallbackPurpePrice;
+      }
+    }
+
+    async function fetchWalletBalance() {
+      try {
+        const res = await fetch(`https://api.helius.xyz/v0/addresses/${walletAddress}/balances?api-key=${heliusApiKey}`);
+        const data = await res.json();
+
+        const tokens = data.tokens || [];
+        const lamports = data.nativeBalance || 0;
+        const sol = lamports / 1_000_000_000;
+
+        const solPrice = await fetchSolPrice();
+        const purpePrice = await fetchPurpePrice();
+
+        const solUSD = sol * solPrice;
+        let purpeUSD = 0;
+        let pyusdUSD = 0;
+
+        for (const token of tokens) {
+          const mint = token.mint?.trim().toLowerCase();
+          const tokenAmount = token.tokenAmount;
+
+          if (!mint || !tokenAmount) continue;
+
+          const decimals = tokenAmount.decimals || 6;
+          const amount = tokenAmount.uiAmount || (tokenAmount.amount / Math.pow(10, decimals));
+
+          if (mint === purpeMint.toLowerCase()) {
+            purpeUSD = amount * purpePrice;
+          }
+
+          if (mint === pyusdMint.toLowerCase()) {
+            pyusdUSD = amount * fixedPyusdPrice;
+          }
+        }
+
+        const totalUSD = solUSD + purpeUSD + pyusdUSD;
+        const percent = Math.min((totalUSD / goalUSD) * 100, 100);
+
+        document.getElementById("raised-amount").textContent = `$${totalUSD.toFixed(2)}`;
+        document.getElementById("progress-bar").style.width = `${percent}%`;
+
+        const breakdownEl = document.getElementById("token-breakdown");
+        if (breakdownEl) {
+          breakdownEl.innerHTML = `
+            • SOL: $${solUSD.toFixed(2)}<br>
+            • PURPE: $${purpeUSD.toFixed(2)}<br>
+            • PYUSD: $${pyusdUSD.toFixed(2)}
+          `;
+        }
+
+      } catch (err) {
+        console.error("Fehler beim Abrufen des Wallet-Guthabens:", err);
+      }
+    }
+
+    fetchWalletBalance();
+    setInterval(fetchWalletBalance, 60000);
+  </script>
 </body>
 </html>
