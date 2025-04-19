@@ -7,7 +7,16 @@ function log(msg) {
 
 async function fetchSolscanTokens() {
   try {
-    const res = await fetch(`https://public-api.solscan.io/account/tokens?account=${walletAddress}`);
+    const res = await fetch(`https://public-api.solscan.io/account/tokens?account=${walletAddress}`, {
+      headers: {
+        accept: "application/json"
+      }
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    }
+
     const tokens = await res.json();
 
     if (!tokens || tokens.length === 0) {
