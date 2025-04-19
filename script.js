@@ -8,13 +8,20 @@ const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo";
 const fallbackPurpePrice = 0.0000373;
 const fixedPyusdPrice = 1.00;
 
+function logToScreen(msg) {
+  const el = document.getElementById("debug-log");
+  if (el) {
+    el.textContent += msg + "\n";
+  }
+}
+
 async function fetchSolPrice() {
   try {
     const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd");
     const data = await res.json();
     return data.solana?.usd || 0;
   } catch (err) {
-    console.error("Fehler beim Abrufen des SOL-Preises:", err);
+    logToScreen("Fehler bei SOL-Preis: " + err.message);
     return 0;
   }
 }
@@ -29,7 +36,7 @@ async function fetchPurpePrice() {
     }
     return fallbackPurpePrice;
   } catch (err) {
-    console.error("Fehler beim Abrufen des PURPE-Preises:", err);
+    logToScreen("Fehler bei PURPE-Preis: " + err.message);
     return fallbackPurpePrice;
   }
 }
@@ -59,11 +66,15 @@ async function fetchWalletBalance() {
       const decimals = tokenAmount.decimals || 6;
       const amount = tokenAmount.uiAmount || (tokenAmount.amount / Math.pow(10, decimals));
 
+      logToScreen("MINT: " + mint + " | AMOUNT: " + amount);
+
       if (mint === purpeMint.toLowerCase()) {
+        logToScreen(">>> PURPE erkannt!");
         purpeUSD = amount * purpePrice;
       }
 
       if (mint === pyusdMint.toLowerCase()) {
+        logToScreen(">>> PYUSD erkannt!");
         pyusdUSD = amount * fixedPyusdPrice;
       }
     }
@@ -84,7 +95,7 @@ async function fetchWalletBalance() {
     }
 
   } catch (err) {
-    console.error("Fehler beim Abrufen des Wallet-Guthabens:", err);
+    logToScreen("Fehler beim Wallet-Check: " + err.message);
   }
 }
 
