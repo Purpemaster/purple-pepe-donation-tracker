@@ -1,11 +1,11 @@
 const walletAddress = "9uo3TB4a8synap9VMNpby6nzmnMs9xJWmgo2YKJHZWVn";
 const heliusApiKey = "2e046356-0f0c-4880-93cc-6d5467e81c73";
 
-// Korrekte PYUSD Mint-Adresse aus Solscan
 const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo";
-const fixedPyusdPrice = 0.9997;
+const pyusdPriceUSD = 0.9997;
+const goalUSD = 20000;
 
-function debugLog(message) {
+function debug(message) {
   const el = document.getElementById("debug-output");
   if (el) el.textContent += message + "\n";
 }
@@ -15,43 +15,45 @@ function clearDebug() {
   if (el) el.textContent = "";
 }
 
-async function fetchPyusdWithDebug() {
+async function fetchBalance() {
   clearDebug();
 
   try {
     const res = await fetch(`https://api.helius.xyz/v0/addresses/${walletAddress}/balances?api-key=${heliusApiKey}`);
     const data = await res.json();
-
     const tokens = data.tokens || [];
+
     let pyusdUSD = 0;
-    debugLog(`--- Tokens im Wallet (${tokens.length}) ---`);
 
     for (const token of tokens) {
-      const mint = (token.mint || "").trim();
+      const mint = token.mint?.trim() || "";
       const decimals = token.decimals || 6;
       const amount = token.amount / Math.pow(10, decimals);
 
-      debugLog(`Mint: ${mint}`);
-      debugLog(`→ Amount: ${amount} | Decimals: ${decimals}`);
+      debug(`Mint: ${mint}`);
+      debug(`→ Amount: ${amount} | Decimals: ${decimals}`);
 
       if (mint.toLowerCase() === pyusdMint.toLowerCase()) {
-        pyusdUSD = amount * fixedPyusdPrice;
-        debugLog(`✓ PYUSD erkannt! USD: $${pyusdUSD.toFixed(2)}\n`);
-        break;
+        pyusdUSD = amount * pyusdPriceUSD;
+        debug(`✓ PYUSD erkannt: $${pyusdUSD.toFixed(2)}`);
       }
     }
 
     if (pyusdUSD === 0) {
-      debugLog("⚠️ Kein gültiger PYUSD gefunden (Mint nicht gematcht)");
+      debug("⚠️ Kein gültiger PYUSD gefunden");
     }
 
+    // UI aktualisieren
     document.getElementById("raised-amount").textContent = `$${pyusdUSD.toFixed(2)}`;
     document.getElementById("token-breakdown").innerHTML = `• PYUSD: $${pyusdUSD.toFixed(2)}`;
 
+    const percent = Math.min((pyusdUSD / goalUSD) * 100, 100);
+    document.getElementById("progress-bar").style.width = `${percent}%`;
+
   } catch (err) {
-    debugLog("Fehler beim Abruf: " + err);
+    debug("Fehler beim Abruf: " + err);
   }
 }
 
-fetchPyusdWithDebug();
-setInterval(fetchPyusdWithDebug, 60000);
+fetchBalance();
+setInterval(fetchBalance, 60000);
