@@ -3,10 +3,10 @@ const heliusApiKey = "2e046356-0f0c-4880-93cc-6d5467e81c73";
 const goalUSD = 20000;
 
 const purpeMint = "HBoNJ5v8g71s2boRivrHnfSB5MVPLDHHyVjruPfhGkvL";
-const pyusdMint = "CxUvRAxLanvp587AQVpFanK6tzXS9RRUVK6gkqo3pump"; // RICHTIG!
+const pyusdMint = "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"; // ← der echte PayPal USD (PYUSD)
 
 const fallbackPurpePrice = 0.0000373;
-const fixedPyusdPrice = 1.00;
+const fixedPyusdPrice = 0.9997;
 
 function debugLog(message) {
   const el = document.getElementById("debug-output");
@@ -60,18 +60,18 @@ async function fetchWalletBalance() {
     let pyusdUSD = 0;
 
     for (const token of tokens) {
-      const mint = (token.mint || "").trim(); // OHNE toLowerCase
+      const mint = (token.mint || "").trim().toLowerCase(); // lowercase-Vergleich!
       const decimals = token.decimals || 6;
       const amount = token.amount / Math.pow(10, decimals);
 
       debugLog(`Token gefunden: ${mint} | Amount: ${amount} | Decimals: ${decimals}`);
 
-      if (mint === purpeMint) {
+      if (mint === purpeMint.toLowerCase()) {
         purpeUSD = amount * purpePrice;
         debugLog("PURPE erkannt: " + amount);
       }
 
-      if (mint === pyusdMint) {
+      if (mint === pyusdMint.toLowerCase()) {
         pyusdUSD = amount * fixedPyusdPrice;
         debugLog("PYUSD erkannt: " + amount);
       }
